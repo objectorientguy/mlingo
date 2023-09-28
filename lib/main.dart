@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:mlingo/home_screen.dart';
+import 'package:mlingo/models/table_model.dart';
 
-void main() {
+import 'configs.dart';
+
+void main() async {
+  await _initApp();
   runApp(const MyApp());
+}
+
+_initApp() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(TableModelAdapter());
+  DatabaseUtil.box = await Hive.openBox('key_box');
 }
 
 class MyApp extends StatelessWidget {
@@ -13,10 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: appTheme,
       home: const HomeScreen(),
     );
   }
